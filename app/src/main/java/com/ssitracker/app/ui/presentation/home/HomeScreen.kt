@@ -14,7 +14,6 @@ import com.ssitracker.app.ui.presentation.home.components.HomeHeader
 import com.ssitracker.app.ui.theme.SSITrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -28,7 +27,6 @@ fun HomeScreen(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreenContent(
     modifier: Modifier,
@@ -51,7 +49,6 @@ fun HomeScreenContent(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {

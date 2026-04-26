@@ -11,7 +11,6 @@ object DateUtils {
      * Formata uma data no formato "Sexta-feira, Abril 24" (dependendo do Locale).
      * Padrão: "EEEE, MMMM d"
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun formatToFullDate(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.ENGLISH)
         return date.format(formatter)

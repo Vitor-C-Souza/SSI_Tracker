@@ -20,7 +20,6 @@ import com.ssitracker.app.ui.theme.SSITrackerTheme
 import com.ssitracker.app.util.DateUtils
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeHeader(
     modifier: Modifier = Modifier
@@ -55,7 +54,6 @@ fun HomeHeader(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun HomeHeaderPreview() {
