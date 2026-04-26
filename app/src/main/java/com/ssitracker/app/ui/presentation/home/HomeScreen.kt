@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ssitracker.app.domain.model.SSI
 import com.ssitracker.app.ui.presentation.home.components.HomeHeader
+import com.ssitracker.app.ui.presentation.home.components.SSIScore
 import com.ssitracker.app.ui.theme.SSITrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -44,7 +46,9 @@ fun HomeScreenContent(
                 .fillMaxSize()
                 .padding(it)
         ) {
-
+            SSIScore(
+                ssiList = state.ssiList ?: emptyList()
+            )
         }
     }
 }
