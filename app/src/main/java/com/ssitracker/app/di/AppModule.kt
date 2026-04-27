@@ -7,6 +7,7 @@ import com.ssitracker.app.domain.repository.SSIRepository
 import com.ssitracker.app.domain.usecase.GetAllSSIUseCase
 import com.ssitracker.app.domain.usecase.GetSSIByIdUseCase
 import com.ssitracker.app.domain.usecase.InsertSSIUseCase
+import com.ssitracker.app.ui.presentation.addentry.AddEntryViewModel
 import com.ssitracker.app.ui.presentation.home.HomeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModelOf
@@ -33,4 +34,5 @@ val appModule = module {
 
     // ViewModel
     viewModelOf(::HomeViewModel)
+    viewModelOf(::AddEntryViewModel)
 }
