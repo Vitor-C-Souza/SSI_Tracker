@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingDown
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.HorizontalRule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -77,7 +79,33 @@ fun SSIScore(
         )
     }
 
-    val improvement = if (filteredList.size > 1) 3 else 0
+    // Cálculo da tendência (último vs primeiro da semana)
+    val weekTrend = if (filteredList.size >= 2) {
+        (filteredList.last().total ?: 0f) - (filteredList.first().total ?: 0f)
+    } else 0f
+
+    // Cálculo da melhoria imediata (último vs anterior)
+    val immediateImprovement = if (filteredList.size >= 2) {
+        (filteredList.last().total ?: 0f) - (filteredList[filteredList.size - 2].total ?: 0f)
+    } else 0f
+
+    val trendColor = when {
+        weekTrend > 0 -> Color(0xFF4CAF50)
+        weekTrend < 0 -> MaterialTheme.colorScheme.error
+        else -> Color.Gray
+    }
+
+    val trendIcon = when {
+        weekTrend > 0 -> Icons.AutoMirrored.Filled.TrendingUp
+        weekTrend < 0 -> Icons.AutoMirrored.Filled.TrendingDown
+        else -> Icons.Default.HorizontalRule
+    }
+
+    val trendText = when {
+        weekTrend > 0 -> "You're improving this week"
+        weekTrend < 0 -> "Your score decreased this week"
+        else -> "Your score is stable this week"
+    }
 
     val chartData = remember(filteredList) {
         filteredList.map { ssi ->
@@ -111,32 +139,36 @@ fun SSIScore(
                     fontWeight = FontWeight.Bold
                 )
 
-                Row(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.TrendingUp,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = "+$improvement",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    )
+                if (filteredList.size >= 2) {
+                    val badgeColor =
+                        if (immediateImprovement >= 0) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
+                    Row(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(badgeColor.copy(alpha = 0.1f))
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (immediateImprovement >= 0) Icons.AutoMirrored.Filled.TrendingUp else Icons.AutoMirrored.Filled.TrendingDown,
+                            contentDescription = null,
+                            tint = badgeColor,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            text = "${if (immediateImprovement >= 0) "+" else ""}${immediateImprovement.toInt()}",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = badgeColor,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "${animatedScore.value.toInt()}", // Valor animado
+                    text = "${animatedScore.value.toInt()}",
                     fontSize = 48.sp,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.ExtraBold,
@@ -150,24 +182,26 @@ fun SSIScore(
                 )
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.TrendingUp,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(16.dp)
-                )
+            if (filteredList.size >= 2) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = trendIcon,
+                        contentDescription = null,
+                        tint = trendColor,
+                        modifier = Modifier.size(16.dp)
+                    )
 
-                Text(
-                    text = "You're improving this week",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
-                )
+                    Text(
+                        text = trendText,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = trendColor,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -255,7 +289,7 @@ fun SSIChart(
             clipRect(
                 left = 0f,
                 top = 0f,
-                right = paddingLeft + (chartWidth * animationProgress.value) + 10.dp.toPx(), // Pequena folga para o ponto final
+                right = paddingLeft + (chartWidth * animationProgress.value) + 10.dp.toPx(),
                 bottom = height
             ) {
                 if (points.size > 1) {

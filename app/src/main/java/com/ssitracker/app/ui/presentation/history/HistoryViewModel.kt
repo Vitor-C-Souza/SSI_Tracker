@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.ssitracker.app.domain.usecase.GetAllSSIUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,18 +23,24 @@ class HistoryViewModel(
             _state.value = _state.value.copy(isLoading = true)
 
             try {
-                getAllSSIUseCase().take(7).collect { ssi ->
+                getAllSSIUseCase().collect { ssiList ->
+
+                    val recentSSI = ssiList
+                        .sortedByDescending { it.createdAt ?: 0L }
+                        .take(7)
+
                     _state.update {
                         it.copy(
-                            history = ssi,
-                            avgScore = ssi.mapNotNull { item -> item.total }.average().toInt(),
+                            history = recentSSI,
+                            avgScore = if (recentSSI.isEmpty()) 0 else recentSSI.mapNotNull { item -> item.total }
+                                .average().toInt(),
+                            isLoading = false
                         )
                     }
                 }
             } catch (e: Exception) {
-                _state.update { it.copy(error = e.message) }
+                _state.update { it.copy(error = e.message, isLoading = false) }
             }
         }
-
     }
 }
