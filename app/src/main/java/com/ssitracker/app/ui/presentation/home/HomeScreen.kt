@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -14,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.isEmpty
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ssitracker.app.ui.components.ButtonType
@@ -85,6 +83,15 @@ fun HomeScreenContent(
         count
     }
 
+    val alreadyHasEntryToday = remember(state.ssiList) {
+        val today = LocalDate.now()
+        state.ssiList?.any { ssi ->
+            ssi.createdAt?.let {
+                Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate() == today
+            } ?: false
+        } ?: false
+    }
+
     Scaffold(
         modifier = modifier
             .fillMaxSize(),
@@ -117,10 +124,11 @@ fun HomeScreenContent(
 
             item {
                 CustomButton(
-                    text = "Add Today's Entry",
+                    text = if (alreadyHasEntryToday) "Today's entry added" else "Add Today's Entry",
                     onClick = onNavigateToEntry,
                     type = ButtonType.SECONDARY,
-                    icon = Icons.AutoMirrored.Filled.ArrowForward,
+                    enabled = !alreadyHasEntryToday,
+                    icon = if (alreadyHasEntryToday) null else Icons.AutoMirrored.Filled.ArrowForward,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
