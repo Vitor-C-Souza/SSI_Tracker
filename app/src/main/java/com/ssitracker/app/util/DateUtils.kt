@@ -2,6 +2,7 @@ package com.ssitracker.app.util
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.Locale
 
 object DateUtils {
@@ -21,5 +22,19 @@ object DateUtils {
     fun formatToFullDateWithYear(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy", Locale.ENGLISH)
         return date.format(formatter)
+    }
+
+    fun formatToFullDateWithoutDayOfWeek(date: LocalDate): String {
+        val formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH)
+        return date.format(formatter)
+    }
+
+    fun getRelativeDayLabel(date: LocalDate): String {
+        val today = LocalDate.now()
+        return when {
+            date == today -> "Today"
+            date == today.minusDays(1) -> "Yesterday"
+            else -> date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+        }
     }
 }
