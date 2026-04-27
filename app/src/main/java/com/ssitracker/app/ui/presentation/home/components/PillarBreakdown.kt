@@ -178,10 +178,20 @@ fun PillarInsightItem(
 
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black.copy(alpha = 0.8f))) {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    )
+                ) {
                     append("$label: ")
                 }
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Normal, color = Color.Black.copy(alpha = 0.6f))) {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                ) {
                     append(value)
                 }
             },
@@ -244,7 +254,11 @@ fun PillarItem(
             Row(
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(if (improvement >= 0) Color(0xFFE8F5E9) else Color(0xFFFFEBEE))
+                    .background(
+                        if (improvement >= 0) MaterialTheme.colorScheme.primary.copy(0.2f) else MaterialTheme.colorScheme.error.copy(
+                            0.2f
+                        )
+                    )
                     .padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp)

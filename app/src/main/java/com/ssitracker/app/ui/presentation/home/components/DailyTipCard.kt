@@ -24,10 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,13 +36,13 @@ fun DailyTipCard(
     tip: String = "Try incorporating 10 minutes of mindfulness into your morning routine to boost your mental clarity."
 ) {
     val accentColor = Color(0xFFF47521)
-    val backgroundColor = Color(0xFFFFF9F2)
+    val backgroundColor = MaterialTheme.colorScheme.surface
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        color = Color.White, // Mantendo o fundo branco para o Surface externo
+        color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(20.dp),
         shadowElevation = 2.dp
     ) {
@@ -53,7 +50,7 @@ fun DailyTipCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
-                .background(backgroundColor) // O fundo creme fica no conteúdo interno
+                .background(backgroundColor)
         ) {
             // Barra lateral laranja
             Box(

@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,7 +65,7 @@ private fun SummaryCard(
 
     Surface(
         modifier = modifier,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(20.dp),
         shadowElevation = 4.dp
     ) {
@@ -76,14 +75,14 @@ private fun SummaryCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black.copy(alpha = 0.6f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 lineHeight = 20.sp
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = animatedValue.value.toInt().toString(),
                 style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }

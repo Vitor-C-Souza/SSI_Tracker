@@ -81,12 +81,12 @@ fun OverallSSIScore(
                         text = "Overall SSI Score",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0D1B2A)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Score 0–100",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
 
@@ -139,12 +139,12 @@ fun OverallSSIScore(
                 Text(
                     text = "0",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     text = "100",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
         }

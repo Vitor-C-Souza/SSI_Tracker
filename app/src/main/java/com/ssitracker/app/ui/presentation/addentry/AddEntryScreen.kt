@@ -1,6 +1,5 @@
 package com.ssitracker.app.ui.presentation.addentry
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,6 +63,13 @@ fun AddEntryScreenContent(
     onBack: () -> Unit = {},
     onNavigateToHome: () -> Unit = {}
 ) {
+
+    LaunchedEffect(state.isSuccessful) {
+        if (state.isSuccessful) {
+            onNavigateToHome()
+        }
+    }
+
     Scaffold(
         modifier = modifier
             .fillMaxSize(),
@@ -78,7 +83,6 @@ fun AddEntryScreenContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
                 .padding(it)
         ) {
             item {
@@ -102,12 +106,12 @@ fun AddEntryScreenContent(
                         text = "Four Pillars",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0D1B2A)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Values based on LinkedIn SSI breakdown",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
             }
