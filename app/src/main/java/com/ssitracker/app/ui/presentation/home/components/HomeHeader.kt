@@ -1,12 +1,16 @@
 package com.ssitracker.app.ui.presentation.home.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,11 +26,14 @@ import java.time.LocalDate
 
 @Composable
 fun HomeHeader(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToHistory: () -> Unit = {},
+    isDarkMode: Boolean = false,
+    onToggleTheme: () -> Unit = {}
 ) {
     val currentDate = remember { LocalDate.now() }
-    val formattedDate = remember(currentDate) { 
-        DateUtils.formatToFullDate(currentDate) 
+    val formattedDate = remember(currentDate) {
+        DateUtils.formatToFullDate(currentDate)
     }
 
     Row(
@@ -49,6 +56,24 @@ fun HomeHeader(
                 text = formattedDate,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            )
+        }
+
+
+
+        IconButton(onClick = onToggleTheme) {
+            Icon(
+                imageVector = if (isDarkMode) Icons.Default.LightMode else Icons.Default.DarkMode,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        IconButton(onClick = onNavigateToHistory) {
+            Icon(
+                imageVector = Icons.Filled.History,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     }

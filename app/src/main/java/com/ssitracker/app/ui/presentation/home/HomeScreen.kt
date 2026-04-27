@@ -11,6 +11,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,14 +34,19 @@ import kotlin.math.roundToInt
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onNavigateToEntry: () -> Unit = {}
+    onNavigateToEntry: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {}
 ) {
     val state = viewModel.state.collectAsState()
+    val isDarkMode by viewModel.isDarkMode.collectAsState(initial = false)
 
     HomeScreenContent(
         state = state.value,
         modifier = modifier,
-        onNavigateToEntry = onNavigateToEntry
+        onNavigateToEntry = onNavigateToEntry,
+        onNavigateToHistory = onNavigateToHistory,
+        isDarkMode = isDarkMode,
+        onToggleTheme = viewModel::toggleTheme
     )
 }
 
@@ -49,6 +55,9 @@ fun HomeScreenContent(
     modifier: Modifier,
     state: HomeState,
     onNavigateToEntry: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
+    isDarkMode: Boolean = false,
+    onToggleTheme: () -> Unit = {},
 ) {
     val avgScore = remember(state.ssiList) {
         val scores = state.ssiList?.mapNotNull { it.total } ?: emptyList()
@@ -96,7 +105,11 @@ fun HomeScreenContent(
         modifier = modifier
             .fillMaxSize(),
         topBar = {
-            HomeHeader()
+            HomeHeader(
+                onNavigateToHistory = onNavigateToHistory,
+                isDarkMode = isDarkMode,
+                onToggleTheme = onToggleTheme
+            )
         }
     ) {
         LazyColumn(

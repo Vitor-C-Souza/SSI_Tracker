@@ -1,6 +1,7 @@
 package com.ssitracker.app.di
 
 import androidx.room.Room.databaseBuilder
+import com.ssitracker.app.data.local.datastore.ThemeManager
 import com.ssitracker.app.data.local.db.AppDatabase
 import com.ssitracker.app.data.local.repository.SSIRepositoryImpl
 import com.ssitracker.app.domain.repository.SSIRepository
@@ -24,6 +25,9 @@ val appModule = module {
         ).build()
     }
     single { get<AppDatabase>().SSIDao() }
+
+    // DataStore
+    single { ThemeManager(androidContext()) }
 
     // Repository
     single<SSIRepository> { SSIRepositoryImpl(get()) }

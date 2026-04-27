@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ssitracker.app.ui.presentation.addentry.AddEntryScreen
+import com.ssitracker.app.ui.presentation.history.HistoryScreen
 import com.ssitracker.app.ui.presentation.home.HomeScreen
 import com.ssitracker.app.ui.presentation.splash.SplashScreen
 
@@ -31,6 +32,9 @@ fun NavGraph(navController: NavHostController) {
             HomeScreen(
                 onNavigateToEntry = {
                     navController.navigate(Screen.AddEntry)
+                },
+                onNavigateToHistory = {
+                    navController.navigate(Screen.History)
                 }
             )
         }
@@ -46,6 +50,14 @@ fun NavGraph(navController: NavHostController) {
                             inclusive = true
                         }
                     }
+                }
+            )
+        }
+
+        composable<Screen.History> {
+            HistoryScreen(
+                onBack = {
+                    navController.popBackStack()
                 }
             )
         }
