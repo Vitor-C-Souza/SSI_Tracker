@@ -1,5 +1,7 @@
 package com.ssitracker.app.ui.presentation.home.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,10 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingDown
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Hub
-import androidx.compose.material.icons.outlined.Insights
-import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.WorkOutline
 import androidx.compose.material3.Icon
@@ -29,9 +28,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ssitracker.app.domain.model.SSI
 import com.ssitracker.app.ui.theme.SSITrackerTheme
+import java.util.Locale
 
 @Composable
 fun PillarBreakdown(
@@ -97,7 +99,7 @@ fun PillarBreakdown(
             // Professional Brand
             PillarItem(
                 label = "Professional\nBrand",
-                value = latest?.professionalBrand ?: 0f,
+                targetValue = latest?.professionalBrand ?: 0f,
                 improvement = (latest?.professionalBrand ?: 0f) - (secondLatest?.professionalBrand ?: 0f),
                 icon = Icons.Outlined.WorkOutline,
                 color = MaterialTheme.colorScheme.primary
@@ -106,7 +108,7 @@ fun PillarBreakdown(
             // Find People
             PillarItem(
                 label = "Find the right\npeople",
-                value = latest?.findPeople ?: 0f,
+                targetValue = latest?.findPeople ?: 0f,
                 improvement = (latest?.findPeople ?: 0f) - (secondLatest?.findPeople ?: 0f),
                 icon = Icons.Outlined.PersonOutline,
                 color = MaterialTheme.colorScheme.secondary
@@ -115,7 +117,7 @@ fun PillarBreakdown(
             // Engage Insights
             PillarItem(
                 label = "Engage with\ninsights",
-                value = latest?.engageInsights ?: 0f,
+                targetValue = latest?.engageInsights ?: 0f,
                 improvement = (latest?.engageInsights ?: 0f) - (secondLatest?.engageInsights ?: 0f),
                 icon = Icons.Outlined.ChatBubbleOutline,
                 color = MaterialTheme.colorScheme.tertiary
@@ -124,7 +126,7 @@ fun PillarBreakdown(
             // Build Relationships
             PillarItem(
                 label = "Build\nrelationships",
-                value = latest?.buildRelationships ?: 0f,
+                targetValue = latest?.buildRelationships ?: 0f,
                 improvement = (latest?.buildRelationships ?: 0f) - (secondLatest?.buildRelationships ?: 0f),
                 icon = Icons.Outlined.Hub,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
@@ -132,8 +134,16 @@ fun PillarBreakdown(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Insights Section
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            // Insights Section com animação de fade-in
+            val alpha = remember { Animatable(0f) }
+            LaunchedEffect(bestPillar) {
+                alpha.animateTo(1f, animationSpec = tween(1000, delayMillis = 500))
+            }
+
+            Column(
+                modifier = Modifier.alpha(alpha.value),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 PillarInsightItem(
                     dotColor = MaterialTheme.colorScheme.primary,
                     label = "Best pillar",
@@ -185,11 +195,20 @@ fun PillarInsightItem(
 @Composable
 fun PillarItem(
     label: String,
-    value: Float,
+    targetValue: Float,
     improvement: Float,
     icon: ImageVector,
     color: Color
 ) {
+    val animatedValue = remember { Animatable(0f) }
+
+    LaunchedEffect(targetValue) {
+        animatedValue.animateTo(
+            targetValue = targetValue,
+            animationSpec = tween(durationMillis = 1500)
+        )
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -238,7 +257,13 @@ fun PillarItem(
                     modifier = Modifier.size(12.dp)
                 )
                 Text(
-                    text = "${if (improvement >= 0) "+" else ""}${String.format("%.1f", improvement)}",
+                    text = "${if (improvement >= 0) "+" else ""}${
+                        String.format(
+                            Locale.US,
+                            "%.1f",
+                            improvement
+                        )
+                    }",
                     style = MaterialTheme.typography.labelSmall,
                     color = if (improvement >= 0) Color(0xFF4CAF50) else Color(0xFFF44336),
                     fontWeight = FontWeight.Bold
@@ -249,7 +274,7 @@ fun PillarItem(
 
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = String.format("%.1f", value),
+                    text = String.format(Locale.US, "%.1f", animatedValue.value),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.ExtraBold
@@ -264,7 +289,7 @@ fun PillarItem(
         }
 
         LinearProgressIndicator(
-            progress = { value / 25f },
+            progress = { animatedValue.value / 25f },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(6.dp),

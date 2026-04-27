@@ -1,5 +1,7 @@
 package com.ssitracker.app.ui.presentation.home.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -34,12 +38,12 @@ fun SummaryCards(
     ) {
         SummaryCard(
             title = "7-Day Streak",
-            value = streak.toString(),
+            targetValue = streak,
             modifier = Modifier.weight(1f)
         )
         SummaryCard(
             title = "Avg Score",
-            value = avgScore.toString(),
+            targetValue = avgScore,
             modifier = Modifier.weight(1f)
         )
     }
@@ -48,9 +52,18 @@ fun SummaryCards(
 @Composable
 private fun SummaryCard(
     title: String,
-    value: String,
+    targetValue: Int,
     modifier: Modifier = Modifier
 ) {
+    val animatedValue = remember { Animatable(0f) }
+
+    LaunchedEffect(targetValue) {
+        animatedValue.animateTo(
+            targetValue = targetValue.toFloat(),
+            animationSpec = tween(durationMillis = 1500)
+        )
+    }
+
     Surface(
         modifier = modifier,
         color = Color.White,
@@ -68,7 +81,7 @@ private fun SummaryCard(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = value,
+                text = animatedValue.value.toInt().toString(),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold
