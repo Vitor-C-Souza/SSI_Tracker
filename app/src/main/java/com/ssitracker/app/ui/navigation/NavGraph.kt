@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ssitracker.app.ui.presentation.addentry.AddEntryScreen
 import com.ssitracker.app.ui.presentation.home.HomeScreen
 import com.ssitracker.app.ui.presentation.splash.SplashScreen
 
@@ -27,7 +28,26 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable<Screen.Home>{
-            HomeScreen()
+            HomeScreen(
+                onNavigateToEntry = {
+                    navController.navigate(Screen.AddEntry)
+                }
+            )
+        }
+
+        composable<Screen.AddEntry> {
+            AddEntryScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+                onNavigateToHome = {
+                    navController.navigate(Screen.Home) {
+                        popUpTo(Screen.Home) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }

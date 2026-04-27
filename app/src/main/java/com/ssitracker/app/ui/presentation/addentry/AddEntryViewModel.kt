@@ -18,26 +18,23 @@ class AddEntryViewModel(
     fun onEvent(event: AddEntryEvent) {
         when (event) {
             is AddEntryEvent.TotalChanged -> {
-                _state.value = _state.value.copy(total = event.total.toFloatOrNull())
+                _state.update { it.copy(total = event.total.toFloatOrNull()) }
             }
 
             is AddEntryEvent.ProfessionalBrandChanged -> {
-                _state.value =
-                    _state.value.copy(professionalBrand = event.professionalBrand.toFloatOrNull())
+                _state.update { it.copy(professionalBrand = event.professionalBrand.toFloatOrNull()) }
             }
 
             is AddEntryEvent.FindPeopleChanged -> {
-                _state.value = _state.value.copy(findPeople = event.findPeople.toFloatOrNull())
+                _state.update { it.copy(findPeople = event.findPeople.toFloatOrNull()) }
             }
 
             is AddEntryEvent.EngageInsightsChanged -> {
-                _state.value =
-                    _state.value.copy(engageInsights = event.engageInsights.toFloatOrNull())
+                _state.update { it.copy(engageInsights = event.engageInsights.toFloatOrNull()) }
             }
 
             is AddEntryEvent.BuildRelationshipsChanged -> {
-                _state.value =
-                    _state.value.copy(buildRelationships = event.buildRelationships.toFloatOrNull())
+                _state.update { it.copy(buildRelationships = event.buildRelationships.toFloatOrNull()) }
             }
 
             AddEntryEvent.SaveEntry -> {

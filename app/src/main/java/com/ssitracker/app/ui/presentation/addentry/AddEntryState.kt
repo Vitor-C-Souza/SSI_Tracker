@@ -4,11 +4,11 @@ data class AddEntryState(
     val isLoading: Boolean = false,
     val isSuccessful: Boolean = false,
     val error: String? = null,
-    val total: Float? = null,
-    val professionalBrand: Float? = null,
-    val findPeople: Float? = null,
-    val engageInsights: Float? = null,
-    val buildRelationships: Float? = null
+    val total: Float? = 50f,
+    val professionalBrand: Float? = 12.5f,
+    val findPeople: Float? = 12.5f,
+    val engageInsights: Float? = 12.5f,
+    val buildRelationships: Float? = 12.5f
 )
 
 sealed class AddEntryEvent {

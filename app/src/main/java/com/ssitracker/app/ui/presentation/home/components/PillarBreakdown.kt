@@ -60,7 +60,6 @@ fun PillarBreakdown(
     val latest = sortedList.getOrNull(0)
     val secondLatest = sortedList.getOrNull(1)
 
-    // Lógica para encontrar o melhor pilar e o que precisa de atenção
     val pillars = remember(latest) {
         latest?.let {
             listOf(
