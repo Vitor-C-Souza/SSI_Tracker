@@ -85,12 +85,12 @@ fun PillarScoreCard(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0D1B2A)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Score 0–25",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
 
@@ -105,7 +105,7 @@ fun PillarScoreCard(
                     Text(
                         text = "/ 25",
                         style = MaterialTheme.typography.labelMedium,
-                        color = Color(0xFF0D1B2A).copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
                 }
             }
@@ -119,7 +119,7 @@ fun PillarScoreCard(
                 thumb = {
                     SliderDefaults.Thumb(
                         interactionSource = remember { MutableInteractionSource() },
-                        colors = SliderDefaults.colors(thumbColor = Color(0xFF424242)),
+                        colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.onSurface),
                         modifier = Modifier.size(16.dp)
                     )
                 },
@@ -143,12 +143,12 @@ fun PillarScoreCard(
                 Text(
                     text = "0",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     text = "25",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color(0xFF0D1B2A).copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
         }
