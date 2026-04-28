@@ -23,7 +23,11 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +49,12 @@ fun PillarScoreCard(
     color: Color,
     modifier: Modifier = Modifier
 ) {
+    val textFieldValue = remember { mutableStateOf(String.format(Locale.US, "%.3f", score)) }
+
+    LaunchedEffect(score) {
+        textFieldValue.value = String.format(Locale.US, "%.3f", score)
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -96,11 +106,30 @@ fun PillarScoreCard(
 
                 // Score Value
                 Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        text = String.format(Locale.US, "%.3f", score),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = color
+                    TextField(
+                        value = textFieldValue.value,
+                        onValueChange = { newValue ->
+                            textFieldValue.value = newValue
+                            val numValue = newValue.toFloatOrNull()
+                            if (numValue != null && numValue in 0f..25f) {
+                                onScoreChange(numValue)
+                            }
+                        },
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(56.dp),
+                        textStyle = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            color = color
+                        ),
+                        singleLine = true,
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = color,
+                            cursorColor = color
+                        )
                     )
                     Text(
                         text = "/ 25",

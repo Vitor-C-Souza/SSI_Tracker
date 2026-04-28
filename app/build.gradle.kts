@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+import java . util . Properties
+        import java . io . FileInputStream
+
 android {
     namespace = "com.ssitracker.app"
     compileSdk = 35
@@ -18,6 +21,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Read Gemini API key from local.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(FileInputStream(localPropertiesFile))
+        }
+        val geminiApiKey = localProperties.getProperty("gemini.api.key", "")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
     buildTypes {
@@ -35,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
