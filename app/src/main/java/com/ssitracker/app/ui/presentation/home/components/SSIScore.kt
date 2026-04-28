@@ -210,7 +210,7 @@ fun SSIScore(
                 data = chartData,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(240.dp)
             )
         }
     }
@@ -240,7 +240,7 @@ fun SSIChart(
         val height = size.height
         val paddingLeft = 40.dp.toPx()
         val paddingRight = 16.dp.toPx()
-        val paddingBottom = 30.dp.toPx()
+        val paddingBottom = 50.dp.toPx()
         val chartWidth = width - paddingLeft - paddingRight
         val chartHeight = height - paddingBottom
 
@@ -290,7 +290,7 @@ fun SSIChart(
                 left = 0f,
                 top = 0f,
                 right = paddingLeft + (chartWidth * animationProgress.value) + 10.dp.toPx(),
-                bottom = height
+                bottom = chartHeight + 10.dp.toPx()
             ) {
                 if (points.size > 1) {
                     val path = Path().apply {
@@ -305,17 +305,21 @@ fun SSIChart(
                 points.forEachIndexed { index, offset ->
                     drawCircle(color = primaryColor, radius = 5.dp.toPx(), center = offset)
                     drawCircle(color = Color.White, radius = 2.dp.toPx(), center = offset)
-
-                    drawContext.canvas.nativeCanvas.drawText(
-                        data[index].day,
-                        offset.x - 15f,
-                        height,
-                        android.graphics.Paint().apply {
-                            color = android.graphics.Color.GRAY
-                            textSize = 10.dp.toPx()
-                        }
-                    )
                 }
+            }
+
+            // Draw day labels outside the clip rect
+            points.forEachIndexed { index, offset ->
+                drawContext.canvas.nativeCanvas.drawText(
+                    data[index].day,
+                    offset.x - 15f,
+                    chartHeight + 25.dp.toPx(),
+                    android.graphics.Paint().apply {
+                        color = android.graphics.Color.GRAY
+                        textSize = 10.dp.toPx()
+                        textAlign = android.graphics.Paint.Align.CENTER
+                    }
+                )
             }
         }
     }
