@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,9 +8,6 @@ plugins {
     alias(libs.plugins.kotlin.symbol.processing)
     alias(libs.plugins.kotlin.serialization)
 }
-
-import java . util . Properties
-        import java . io . FileInputStream
 
 android {
     namespace = "com.ssitracker.app"
@@ -22,7 +22,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Read Gemini API key from local.properties
         val localProperties = Properties()
         val localPropertiesFile = rootProject.file("local.properties")
         if (localPropertiesFile.exists()) {
