@@ -7,24 +7,34 @@ import com.ssitracker.app.domain.repository.AiRepository
 class AiRepositoryImpl(
     private val generativeModel: GenerativeModel,
 ) : AiRepository {
-    override suspend fun getDailyTip(ssi: SSI): String? {
+    override suspend fun getDailyTip(ssiHistory: List<SSI>): String? {
+        if (ssiHistory.isEmpty()) return null
+
+        // Limita aos últimos 7 registros para focar em tendências recentes e economizar tokens
+        val recentHistory = ssiHistory.takeLast(7)
+
+        val historyDescription = recentHistory.joinToString("\n") { ssi ->
+            "- Date: ${ssi.id}, Total: ${ssi.total}/100 (Brand: ${ssi.professionalBrand}, People: ${ssi.findPeople}, Insights: ${ssi.engageInsights}, Relationships: ${ssi.buildRelationships})"
+        }
+
         val prompt = """
-            Sou um usuário do LinkedIn e meu Social Selling Index (SSI) atual é ${ssi.total}/100.
-            Meus pilares são:
-            - Estabelecer sua marca profissional: ${ssi.professionalBrand}
-            - Localizar as pessoas certas: ${ssi.findPeople}
-            - Interagir oferecendo insights: ${ssi.engageInsights}
-            - Criar relacionamentos: ${ssi.buildRelationships}
+            I am a LinkedIn user tracking my Social Selling Index (SSI). 
+            Here is my SSI history for the last 7 entries:
+            $historyDescription
             
-            Com base nesses números, me dê uma dica curta, prática e motivadora em português (máximo 2 frases) de como posso melhorar meu score hoje.
+            Task:
+            1. Analyze the trends over these days.
+            2. Identify which of the 4 pillars is underperforming or shows a downward trend.
+            3. Provide a short, practical, and motivating tip in English (max 2 sentences) on what specific action I should take today to improve that score.
+            
+            Response must be in English.
         """.trimIndent()
 
         return try {
             val response = generativeModel.generateContent(prompt)
-
-            response.text ?: "Continue focado em interagir com sua rede para aumentar seu SSI!"
+            response.text ?: "Focus on engaging with your network today to boost your SSI!"
         } catch (e: Exception) {
-            "No momento não foi possível gerar uma dica personalizada, mas continue sua rotina de networking!"
+            "Keep building your professional brand and connecting with people to improve your score!"
         }
     }
 }

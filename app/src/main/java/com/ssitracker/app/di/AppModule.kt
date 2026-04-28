@@ -56,7 +56,7 @@ val appModule = module {
     factory { InsertSSIUseCase(get()) }
     factory { GetAllSSIUseCase(get()) }
     factory { GetSSIByIdUseCase(get()) }
-    factory { GetDailyTipUseCase(get(), get()) }
+    factory { GetDailyTipUseCase(get(), get(), get()) }
 
     // ViewModel
     viewModelOf(::HomeViewModel)

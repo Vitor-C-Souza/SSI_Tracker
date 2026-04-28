@@ -3,7 +3,6 @@ package com.ssitracker.app.ui.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssitracker.app.data.local.datastore.ThemeManager
-import com.ssitracker.app.data.local.mapper.toEntity
 import com.ssitracker.app.domain.repository.PreferenceRepository
 import com.ssitracker.app.domain.usecase.GetAllSSIUseCase
 import com.ssitracker.app.domain.usecase.GetDailyTipUseCase
@@ -46,6 +45,11 @@ class HomeViewModel(
                         isLoading = false
                     )
                 }
+
+                // Automatically try to update tip if we have data
+                if (ssiList.isNotEmpty()) {
+                    updateDailyTip()
+                }
             }
         }
     }
@@ -56,10 +60,9 @@ class HomeViewModel(
         initialValue = "Loading daily tip"
     )
 
-    fun updateDailyTip(latestSSI: com.ssitracker.app.domain.model.SSI?) {
+    fun updateDailyTip() {
         viewModelScope.launch {
-            getDailyTipUseCase(latestSSI?.toEntity())
+            getDailyTipUseCase()
         }
-
     }
 }

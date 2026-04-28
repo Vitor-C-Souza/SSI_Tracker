@@ -21,6 +21,7 @@ import com.ssitracker.app.ui.theme.SSITrackerTheme
 import com.ssitracker.app.util.DateUtils
 import java.time.Instant
 import java.time.ZoneId
+import kotlin.math.roundToInt
 
 @Composable
 fun SSICard(
@@ -71,7 +72,7 @@ fun SSICard(
             }
 
             Text(
-                text = ssi.total?.toInt()?.toString() ?: "N/A",
+                text = ssi.total?.roundToInt()?.toString() ?: "N/A",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold

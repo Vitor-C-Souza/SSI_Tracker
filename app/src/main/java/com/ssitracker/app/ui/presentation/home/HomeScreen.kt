@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -42,11 +41,6 @@ fun HomeScreen(
     val isDarkMode by viewModel.isDarkMode.collectAsState(initial = false)
 
     val dailyTip by viewModel.dailyTip.collectAsState()
-
-    LaunchedEffect(state.value.ssiList) {
-        val latest = state.value.ssiList?.maxByOrNull { it.createdAt ?: Long.MIN_VALUE }
-        viewModel.updateDailyTip(latest)
-    }
 
     HomeScreenContent(
         state = state.value,
