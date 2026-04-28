@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,8 +41,16 @@ fun HomeScreen(
     val state = viewModel.state.collectAsState()
     val isDarkMode by viewModel.isDarkMode.collectAsState(initial = false)
 
+    val dailyTip by viewModel.dailyTip.collectAsState()
+
+    LaunchedEffect(state.value.ssiList) {
+        val latest = state.value.ssiList?.maxByOrNull { it.createdAt ?: Long.MIN_VALUE }
+        viewModel.updateDailyTip(latest)
+    }
+
     HomeScreenContent(
         state = state.value,
+        dailyTip = dailyTip,
         modifier = modifier,
         onNavigateToEntry = onNavigateToEntry,
         onNavigateToHistory = onNavigateToHistory,
@@ -58,6 +67,7 @@ fun HomeScreenContent(
     onNavigateToHistory: () -> Unit = {},
     isDarkMode: Boolean = false,
     onToggleTheme: () -> Unit = {},
+    dailyTip: String? = "Loading tip...",
 ) {
     val avgScore = remember(state.ssiList) {
         val scores = state.ssiList?.mapNotNull { it.total } ?: emptyList()
@@ -132,7 +142,9 @@ fun HomeScreenContent(
             }
 
             item {
-                DailyTipCard()
+                DailyTipCard(
+                    tip = dailyTip ?: "Loading tip..."
+                )
             }
 
             item {
@@ -169,6 +181,7 @@ fun HomeScreenPreview() {
         HomeScreenContent(
             modifier = Modifier,
             state = HomeState(),
+            dailyTip = "Loading tip..."
         )
     }
 }

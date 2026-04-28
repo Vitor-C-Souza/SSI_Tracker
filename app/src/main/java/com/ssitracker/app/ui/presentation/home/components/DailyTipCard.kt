@@ -33,7 +33,7 @@ import com.ssitracker.app.ui.theme.SSITrackerTheme
 @Composable
 fun DailyTipCard(
     modifier: Modifier = Modifier,
-    tip: String = "Try incorporating 10 minutes of mindfulness into your morning routine to boost your mental clarity."
+    tip: String = "Loading tip..."
 ) {
     val accentColor = Color(0xFFF47521)
     val backgroundColor = MaterialTheme.colorScheme.surface
@@ -52,23 +52,22 @@ fun DailyTipCard(
                 .height(IntrinsicSize.Min)
                 .background(backgroundColor)
         ) {
-            // Barra lateral laranja
+
             Box(
                 modifier = Modifier
-                    .width(10.dp)
+                    .width(6.dp)
                     .fillMaxHeight()
                     .background(accentColor)
             )
 
-            // Conteúdo do Card
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                // Ícone
-                Box(
+
+            Box(
                     modifier = Modifier
                         .size(42.dp)
                         .background(accentColor, shape = CircleShape),

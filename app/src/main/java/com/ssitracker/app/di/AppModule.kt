@@ -6,6 +6,7 @@ import com.ssitracker.app.data.local.db.AppDatabase
 import com.ssitracker.app.data.local.repository.SSIRepositoryImpl
 import com.ssitracker.app.domain.repository.SSIRepository
 import com.ssitracker.app.domain.usecase.GetAllSSIUseCase
+import com.ssitracker.app.domain.usecase.GetDailyTipUseCase
 import com.ssitracker.app.domain.usecase.GetSSIByIdUseCase
 import com.ssitracker.app.domain.usecase.InsertSSIUseCase
 import com.ssitracker.app.ui.presentation.addentry.AddEntryViewModel
@@ -36,6 +37,7 @@ val appModule = module {
     factory { InsertSSIUseCase(get()) }
     factory { GetAllSSIUseCase(get()) }
     factory { GetSSIByIdUseCase(get()) }
+    factory { GetDailyTipUseCase(get(), get()) }
 
     // ViewModel
     viewModelOf(::HomeViewModel)
