@@ -1,6 +1,8 @@
 package com.ssitracker.app.ui.presentation.history
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ssitracker.app.domain.model.SSI
 import com.ssitracker.app.ui.components.CustomTopAppBar
 import com.ssitracker.app.ui.presentation.history.components.AVGScore
@@ -63,6 +66,10 @@ fun HistoryScreenContent(
 
             items(ssiList) { ssi ->
                 SSICard(ssi = ssi)
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
